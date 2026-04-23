@@ -16,9 +16,11 @@ namespace L9_new
 
         private int boardSize;
         private int[,] board;
+        private GoLogic gameLogic;
         private PlayerColor myColor = PlayerColor.None;
         private PlayerColor currentTurn = PlayerColor.None;
         private bool roundActive;
+        private Button endGameButton;
 
         public GameForm(ClientConnection connection, ServerConnection server = null)
         {
@@ -50,7 +52,7 @@ namespace L9_new
         private void InitializeGameUI()
         {
             Text = "Игра в Го";
-            ClientSize = new Size(800, 700);
+            ClientSize = new Size(800, 850);
             StartPosition = FormStartPosition.CenterScreen;
 
             statusLabel = new Label
@@ -80,8 +82,23 @@ namespace L9_new
             boardPanel.Paint += BoardPanel_Paint;
             boardPanel.MouseClick += BoardPanel_MouseClick;
             Controls.Add(boardPanel);
+
+            endGameButton = new Button
+            {
+                Location = new Point(10, 770),
+                Size = new Size(200, 35),
+                Text = "Пропустить ход"
+            };
+            endGameButton.Click += (sender, args) => RequestPass();
+            Controls.Add(endGameButton);
         }
 
+        private void RequestPass()
+        {
+            if (!roundActive) return;
+            clientConnection.SendMessage(GameProtocol.Build("RequestPass"));
+            SetStatus("Пас отправлен...", Color.Black);
+        }
         private void HandleMessageReceived(string message)
         {
             if (InvokeRequired)
@@ -111,11 +128,17 @@ namespace L9_new
                 case "MoveAccepted":
                     ProcessMoveAccepted(parts);
                     break;
+                case "PlayerPassed":
+                    HandlePlayerPassed(parts);
+                    break;
                 case "MoveRejected":
                     SetStatus(parts.Length > 1 ? parts[1] : "Ход отклонен", Color.DarkRed);
                     break;
                 case "Error":
                     SetStatus(parts.Length > 1 ? parts[1] : "Произошла ошибка", Color.DarkRed);
+                    break;
+                case "GameEnded":
+                    HandleGameEnded(parts);
                     break;
                 case "GameMessage":
                     if (parts.Length > 1)
@@ -135,12 +158,10 @@ namespace L9_new
             if (parts[1].Equals("Host", StringComparison.OrdinalIgnoreCase))
             {
                 isHost = true;
-                roleLabel.Text = "Роль: Хост";
             }
             else if (parts[1].Equals("Guest", StringComparison.OrdinalIgnoreCase))
             {
                 isHost = false;
-                roleLabel.Text = "Роль: Гость";
             }
         }
 
@@ -210,22 +231,58 @@ namespace L9_new
                 return;
             }
 
-            if (board != null && x >= 0 && x < boardSize && y >= 0 && y < boardSize)
+            if (gameLogic != null)
             {
-                board[x, y] = (int)placedColor;
+                gameLogic.TryPlaceStone(x, y, (int)placedColor);
+                board = gameLogic.Board;
             }
 
-            if (IsMyTurn())
-            {
-                SetStatus("Ваш ход", Color.Green);
-            } else { SetStatus("Ожидайте ход соперника", Color.DarkGoldenrod);}
-                boardPanel.Invalidate();
+            SetStatus(IsMyTurn() ? "Ваш ход" : "Ожидайте ход соперника", Color.Black);
+            endGameButton.Enabled = IsMyTurn();
+            boardPanel.Invalidate();
         }
 
         private void SetStatus(string message, Color color)
         {
             statusLabel.Text = message;
             statusLabel.ForeColor = color;
+        }
+
+        private void HandleGameEnded(string[] parts)
+        {
+            if (parts.Length < 3 || !int.TryParse(parts[1], out var blackScore) || !int.TryParse(parts[2], out var whiteScore))
+            {
+                SetStatus("Ошибка при получении результатов игры", Color.DarkRed);
+                return;
+            }
+
+            roundActive = false;
+            var winner = blackScore > whiteScore ? "Чёрные" : whiteScore > blackScore ? "Белые" : "Ничья";
+            var message = $"Игра закончена! Чёрные: {blackScore}, Белые: {whiteScore}. Победитель: {winner}";
+            SetStatus(message, Color.Green);
+        }
+
+        private void HandlePlayerPassed(string[] parts)
+        {
+            if (parts.Length < 4)
+            {
+                return;
+            }
+
+            var passedColor = GameProtocol.ParseColor(parts[1]);
+            currentTurn = GameProtocol.ParseColor(parts[2]);
+
+            if (!int.TryParse(parts[3], out var passCount))
+            {
+                passCount = 0;
+            }
+
+            var passMessage = passCount == 1 
+                ? $"{GameProtocol.ColorToString(passedColor)} спасовал. Ваш ход."
+                : $"{GameProtocol.ColorToString(passedColor)} спасовал (2 подряд). Игра завершается...";
+            
+            SetStatus(passMessage, Color.DarkGoldenrod);
+            endGameButton.Enabled = IsMyTurn();
         }
 
         private void BoardPanel_MouseClick(object sender, MouseEventArgs e)
@@ -254,6 +311,7 @@ namespace L9_new
             }
 
             clientConnection.SendMessage(GameProtocol.Build("RequestMove", x.ToString(), y.ToString()));
+            endGameButton.Enabled = IsMyTurn();
         }
 
         private bool GetBoardCoordinates(Point click, out int x, out int y)
@@ -299,6 +357,7 @@ namespace L9_new
         {
             boardSize = size;
             board = new int[size, size];
+            gameLogic = new GoLogic(size);
             roundActive = true;
             boardPanel.Invalidate();
         }

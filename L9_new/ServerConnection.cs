@@ -21,6 +21,8 @@ namespace L9_new
         public PlayerColor CurrentTurn { get; set; }
         public int[,] Board { get; set; }
         public bool Active { get; set; }
+        public GoLogic GameLogic { get; set; }
+        public int ConsecutivePasses { get; set; }
 
         public RoundState(int boardSize, PlayerColor hostColor, PlayerColor guestColor)
         {
@@ -29,7 +31,9 @@ namespace L9_new
             GuestColor = guestColor;
             CurrentTurn = PlayerColor.Black;
             Board = new int[boardSize, boardSize];
+            GameLogic = new GoLogic(boardSize);
             Active = true;
+            ConsecutivePasses = 0;
         }
     }
 
@@ -94,6 +98,8 @@ namespace L9_new
                     {
                         lock (clientLock)
                         {
+                            var wasGameActive = currentRound?.Active ?? false;
+
                             if (socket == hostSocket)
                             {
                                 hostSocket = null;
@@ -106,14 +112,27 @@ namespace L9_new
                             if (currentRound != null)
                             {
                                 currentRound.Active = false;
+
+                                if (wasGameActive)
+                                {
+                                    var scores = currentRound.GameLogic.CalculateScore();
+                                    if (hostSocket != null)
+                                    {
+                                        SendToSocket(hostSocket, GameProtocol.Build("GameEnded", scores[0].ToString(), scores[1].ToString()));
+                                    }
+                                    if (guestSocket != null)
+                                    {
+                                        SendToSocket(guestSocket, GameProtocol.Build("GameEnded", scores[0].ToString(), scores[1].ToString()));
+                                    }
+                                }
                             }
 
-                            if (hostSocket != null)
+                            if (hostSocket != null && !wasGameActive)
                             {
                                 SendToSocket(hostSocket, GameProtocol.Build("Error", "Противник отключился"));
                             }
 
-                            if (guestSocket != null)
+                            if (guestSocket != null && !wasGameActive)
                             {
                                 SendToSocket(guestSocket, GameProtocol.Build("Error", "Противник отключился"));
                             }
@@ -166,10 +185,62 @@ namespace L9_new
                 case "RequestMove":
                     HandleMoveRequest(socket, parts);
                     break;
+                case "RequestPass":
+                    HandlePassRequest(socket, parts);
+                    break;
                 default:
                     SendToSocket(socket, GameProtocol.Build("Error", "Неизвестная команда"));
                     break;
             }
+        }
+
+        private void HandlePassRequest(IWebSocketConnection socket, string[] parts)
+        {
+            if (currentRound == null || !currentRound.Active)
+            {
+                SendToSocket(socket, GameProtocol.Build("Error", "Раунд не начат"));
+                return;
+            }
+
+            var playerColor = GetPlayerColor(socket);
+            if (playerColor == PlayerColor.None)
+            {
+                SendToSocket(socket, GameProtocol.Build("Error", "Игрок не в раунде"));
+                return;
+            }
+
+            if (playerColor != currentRound.CurrentTurn)
+            {
+                SendToSocket(socket, GameProtocol.Build("Error", "Сейчас не ваш ход"));
+                return;
+            }
+
+            currentRound.ConsecutivePasses++;
+            currentRound.CurrentTurn = GameProtocol.Opponent(playerColor);
+
+            if (currentRound.ConsecutivePasses >= 2)
+            {
+                EndGameAndCalculateScore();
+            }
+            else
+            {
+                Broadcast(GameProtocol.Build(
+                    "PlayerPassed",
+                    GameProtocol.ColorToString(playerColor),
+                    GameProtocol.ColorToString(currentRound.CurrentTurn),
+                    currentRound.ConsecutivePasses.ToString()));
+            }
+        }
+
+        private void EndGameAndCalculateScore()
+        {
+            currentRound.Active = false;
+            var scores = currentRound.GameLogic.CalculateScore();
+
+            Broadcast(GameProtocol.Build(
+                "GameEnded",
+                scores[0].ToString(),
+                scores[1].ToString()));
         }
 
         private void HandleSettingsRequest(IWebSocketConnection socket, string[] parts)
@@ -248,21 +319,27 @@ namespace L9_new
                 return;
             }
 
-            if (currentRound.Board[x, y] != 0)
+            if (!currentRound.GameLogic.TryPlaceStone(x, y, (int)playerColor))
             {
-                SendToSocket(socket, GameProtocol.Build("MoveRejected", "Клетка уже занята"));
+                SendToSocket(socket, GameProtocol.Build("MoveRejected", "Недопустимый ход (самоубийство или занятая клетка)"));
                 return;
             }
 
-            currentRound.Board[x, y] = (int)playerColor;
+            currentRound.Board = currentRound.GameLogic.Board;
+            currentRound.ConsecutivePasses = 0;
             currentRound.CurrentTurn = GameProtocol.Opponent(playerColor);
 
+            BroadcastMoveAccepted(x, y, playerColor, currentRound.CurrentTurn);
+        }
+
+        private void BroadcastMoveAccepted(int x, int y, PlayerColor playerColor, PlayerColor nextTurn)
+        {
             Broadcast(GameProtocol.Build(
                 "MoveAccepted",
                 x.ToString(),
                 y.ToString(),
                 GameProtocol.ColorToString(playerColor),
-                GameProtocol.ColorToString(currentRound.CurrentTurn)));
+                GameProtocol.ColorToString(nextTurn)));
         }
 
         private PlayerColor GetPlayerColor(IWebSocketConnection socket)
