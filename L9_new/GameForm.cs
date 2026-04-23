@@ -8,7 +8,6 @@ namespace L9_new
     {
         private Panel boardPanel;
         private Label statusLabel;
-        private Button settingsButton;
         private Label roleLabel;
 
         private ClientConnection clientConnection;
@@ -33,13 +32,11 @@ namespace L9_new
             if (isHost)
             {
                 statusLabel.Text = "Хост: ожидание второго игрока...";
-                settingsButton.Enabled = false;
                 roleLabel.Text = "Роль: Хост";
             }
             else
             {
                 statusLabel.Text = "Гость: ожидание настройки раунда...";
-                settingsButton.Enabled = false;
                 roleLabel.Text = "Роль: Гость";
             }
 
@@ -73,16 +70,6 @@ namespace L9_new
                 Font = new Font(Font.FontFamily, 9, FontStyle.Regular)
             };
             Controls.Add(roleLabel);
-
-            settingsButton = new Button
-            {
-                Location = new Point(630, 40),
-                Size = new Size(150, 30),
-                Text = "Настройки раунда",
-                Enabled = false
-            };
-            settingsButton.Click += SettingsButton_Click;
-            Controls.Add(settingsButton);
 
             boardPanel = new Panel
             {
@@ -162,7 +149,14 @@ namespace L9_new
             statusLabel.Text = "Второй игрок подключился. Настройте раунд.";
             if (isHost)
             {
-                settingsButton.Enabled = true;
+                using (var settingsForm = new RoundSettingsForm())
+                {
+                    if (settingsForm.ShowDialog(this) == DialogResult.OK)
+                    {
+                        clientConnection.SendMessage(GameProtocol.Build("RequestSettings", settingsForm.BoardSize.ToString(), settingsForm.SelectedColor));
+                        SetStatus("Отправлены настройки раунда. Ожидание ответа сервера...", Color.Black);
+                    }
+                }
             }
         }
 
@@ -191,7 +185,6 @@ namespace L9_new
 
             roleLabel.Text = isHost ? $"Роль: Хост ({GameProtocol.ColorToString(myColor)})" : $"Роль: Гость ({GameProtocol.ColorToString(myColor)})";
             statusLabel.Text = IsMyTurn() ? "Ваш ход" : "Ожидайте ход соперника";
-            settingsButton.Enabled = false;
             boardPanel.Invalidate();
         }
 
@@ -233,21 +226,6 @@ namespace L9_new
         {
             statusLabel.Text = message;
             statusLabel.ForeColor = color;
-        }
-
-        private void SettingsButton_Click(object sender, EventArgs e)
-        {
-            if (!isHost) return;
-
-            using (var settingsForm = new RoundSettingsForm())
-            {
-                if (settingsForm.ShowDialog(this) == DialogResult.OK)
-                {
-                    clientConnection.SendMessage(GameProtocol.Build("RequestSettings", settingsForm.BoardSize.ToString(), settingsForm.SelectedColor));
-                    SetStatus("Отправлены настройки раунда. Ожидание ответа сервера...", Color.Black);
-                    settingsButton.Enabled = false;
-                }
-            }
         }
 
         private void BoardPanel_MouseClick(object sender, MouseEventArgs e)
