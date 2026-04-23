@@ -373,6 +373,8 @@ namespace L9_new
                 serverConnection.Stop();
             }
 
+            System.Threading.Thread.Sleep(500);
+
             base.OnFormClosing(e);
             Application.Exit();
         }

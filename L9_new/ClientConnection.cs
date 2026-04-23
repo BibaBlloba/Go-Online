@@ -66,9 +66,23 @@ namespace L9_new
 
         public void Disconnect()
         {
-            if (!isConnected) return;
+            try
+            {
+                if (ws != null)
+                {
+                    if (ws.IsAlive)
+                    {
+                        ws.Close();
+                    }
+                    ws = null;
+                }
+            }
+            catch
+            {
+                // Игнорируем ошибки отключения
+            }
 
-            ws?.Close();
+            isConnected = false;
         }
 
         public void SendMessage(string message)

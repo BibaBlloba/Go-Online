@@ -41,6 +41,7 @@ namespace L9_new
         private IWebSocketConnection guestSocket;
         private RoundState currentRound;
         private bool isRunning;
+        private Task serverTask;
 
         public event Action OnClientConnected;
         public event Action OnClientDisconnected;
@@ -57,7 +58,7 @@ namespace L9_new
             if (isRunning) return;
 
             isRunning = true;
-            Task.Run(() =>
+            serverTask = Task.Run(() =>
             {
                 server.Start(socket =>
                 {
@@ -129,7 +130,10 @@ namespace L9_new
                     };
                 });
 
-                System.Threading.Thread.Sleep(System.Threading.Timeout.Infinite);
+                while (isRunning)
+                {
+                    System.Threading.Thread.Sleep(100);
+                }
             });
         }
 
@@ -313,8 +317,34 @@ namespace L9_new
         {
             if (!isRunning) return;
 
+            lock (clientLock)
+            {
+                if (hostSocket != null)
+                {
+                    try { hostSocket.Close(); } catch { }
+                    hostSocket = null;
+                }
+                if (guestSocket != null)
+                {
+                    try { guestSocket.Close(); } catch { }
+                    guestSocket = null;
+                }
+            }
+
             isRunning = false;
             server?.Dispose();
+
+            if (serverTask != null)
+            {
+                try
+                {
+                    serverTask.Wait(2000);
+                }
+                catch
+                {
+                    // Игнорируем ошибки ожидания задачи
+                }
+            }
         }
     }
 
