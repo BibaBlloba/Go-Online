@@ -1,0 +1,14 @@
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\bin\Debug\L9_new.exe.config
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\bin\Debug\L9_new.exe
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\bin\Debug\L9_new.pdb
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\bin\Debug\Fleck.dll
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\obj\Debug\L9_new.csproj.AssemblyReference.cache
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\obj\Debug\L9_new.Properties.Resources.resources
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\obj\Debug\L9_new.csproj.GenerateResource.cache
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\obj\Debug\L9_new.csproj.CoreCompileInputs.cache
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\obj\Debug\L9_new.csproj.Up2Date
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\obj\Debug\L9_new.exe
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\obj\Debug\L9_new.pdb
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\obj\Debug\L9_new.MainMenu.resources
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\bin\Debug\websocket-sharp.dll
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\bin\Debug\websocket-sharp.xml
