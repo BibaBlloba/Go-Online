@@ -27,3 +27,4 @@ D:\proj\Go-Online\L9_new\obj\Debug\L9_new.csproj.CoreCompileInputs.cache
 D:\proj\Go-Online\L9_new\obj\Debug\L9_new.csproj.Up2Date
 D:\proj\Go-Online\L9_new\obj\Debug\L9_new.exe
 D:\proj\Go-Online\L9_new\obj\Debug\L9_new.pdb
+D:\proj\Go-Online\L9_new\obj\Debug\L9_new.GameForm.resources

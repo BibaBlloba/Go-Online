@@ -21,48 +21,50 @@ namespace L9_new
         {
             InitializeComponent();
         }
-
+        
+        // Подключение как клиент к удаленному серверу
         private void button1_Click(object sender, EventArgs e)
         {
-            // Подключение как клиент к удаленному серверу
             string serverAddress = textBox1.Text;
             if (string.IsNullOrWhiteSpace(serverAddress))
             {
-                MessageBox.Show("Пожалуйста, введите адрес сервера");
+                errorLabel.Visible = true;
+                errorLabel.Text = "Не удалось подключиться к серверу.";
                 return;
             }
 
             clientConnection = new ClientConnection($"ws://{serverAddress}");
             clientConnection.OnConnected += () =>
             {
-                MessageBox.Show("Успешно подключено к серверу");
+                //
             };
             clientConnection.OnErrorOccurred += (error) =>
             {
-                MessageBox.Show($"Ошибка подключения: {error}");
+                errorLabel.Visible = true;
+                errorLabel.Text = "Не удалось подключиться к серверу.";
             };
 
             clientConnection.Connect();
             OpenGameForm();
         }
-
+        
+        // Запуск сервера и подключение как клиент локально
         private void button2_Click(object sender, EventArgs e)
         {
-            // Запуск сервера и подключение как клиент локально
             serverConnection = new ServerConnection("ws://0.0.0.0:8181");
             serverConnection.Start();
 
-            // Небольшая задержка чтобы сервер успел запуститься
             System.Threading.Thread.Sleep(500);
 
             clientConnection = new ClientConnection("ws://localhost:8181");
             clientConnection.OnConnected += () =>
             {
-                MessageBox.Show("Успешно подключено к локальному серверу");
+                //
             };
             clientConnection.OnErrorOccurred += (error) =>
             {
-                MessageBox.Show($"Ошибка подключения: {error}");
+                errorLabel.Visible = true;
+                errorLabel.Text = "Не удалось подключиться к серверу.";
             };
 
             clientConnection.Connect();
@@ -73,7 +75,6 @@ namespace L9_new
         {
             GameForm gameForm = new GameForm(clientConnection, serverConnection);
 
-            // Скрываем MainMenu вместо закрытия
             this.Hide();
             gameForm.Show();
         }
