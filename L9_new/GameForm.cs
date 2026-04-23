@@ -125,10 +125,10 @@ namespace L9_new
                     ProcessMoveAccepted(parts);
                     break;
                 case "MoveRejected":
-                    SetStatus(parts.Length > 1 ? parts[1] : "Ход отклонен", true);
+                    SetStatus(parts.Length > 1 ? parts[1] : "Ход отклонен", Color.DarkRed);
                     break;
                 case "Error":
-                    SetStatus(parts.Length > 1 ? parts[1] : "Произошла ошибка", true);
+                    SetStatus(parts.Length > 1 ? parts[1] : "Произошла ошибка", Color.DarkRed);
                     break;
                 case "GameMessage":
                     if (parts.Length > 1)
@@ -170,13 +170,13 @@ namespace L9_new
         {
             if (parts.Length < 4)
             {
-                SetStatus("Некорректные настройки раунда", true);
+                SetStatus("Некорректные настройки раунда", Color.DarkRed);
                 return;
             }
 
             if (!int.TryParse(parts[1], out var size))
             {
-                SetStatus("Некорректный размер карты", true);
+                SetStatus("Некорректный размер карты", Color.DarkRed);
                 return;
             }
 
@@ -199,13 +199,13 @@ namespace L9_new
         {
             if (parts.Length < 5)
             {
-                SetStatus("Некорректный ответ сервера на ход", true);
+                SetStatus("Некорректный ответ сервера на ход", Color.DarkRed);
                 return;
             }
 
             if (!int.TryParse(parts[1], out var x) || !int.TryParse(parts[2], out var y))
             {
-                SetStatus("Некорректные координаты хода", true);
+                SetStatus("Некорректные координаты хода", Color.DarkRed);
                 return;
             }
 
@@ -213,7 +213,7 @@ namespace L9_new
             currentTurn = GameProtocol.ParseColor(parts[4]);
             if (placedColor == PlayerColor.None)
             {
-                SetStatus("Неизвестный цвет хода", true);
+                SetStatus("Неизвестный цвет хода", Color.DarkRed);
                 return;
             }
 
@@ -222,14 +222,17 @@ namespace L9_new
                 board[x, y] = (int)placedColor;
             }
 
-            SetStatus(IsMyTurn() ? "Ваш ход" : "Ожидайте ход соперника", false);
-            boardPanel.Invalidate();
+            if (IsMyTurn())
+            {
+                SetStatus("Ваш ход", Color.Green);
+            } else { SetStatus("Ожидайте ход соперника", Color.DarkGoldenrod);}
+                boardPanel.Invalidate();
         }
 
-        private void SetStatus(string message, bool isError = false)
+        private void SetStatus(string message, Color color)
         {
             statusLabel.Text = message;
-            statusLabel.ForeColor = isError ? Color.DarkRed : Color.Black;
+            statusLabel.ForeColor = color;
         }
 
         private void SettingsButton_Click(object sender, EventArgs e)
@@ -241,7 +244,7 @@ namespace L9_new
                 if (settingsForm.ShowDialog(this) == DialogResult.OK)
                 {
                     clientConnection.SendMessage(GameProtocol.Build("RequestSettings", settingsForm.BoardSize.ToString(), settingsForm.SelectedColor));
-                    SetStatus("Отправлены настройки раунда. Ожидание ответа сервера...", false);
+                    SetStatus("Отправлены настройки раунда. Ожидание ответа сервера...", Color.Black);
                     settingsButton.Enabled = false;
                 }
             }
@@ -251,13 +254,13 @@ namespace L9_new
         {
             if (!roundActive)
             {
-                SetStatus("Раунд не начат.", true);
+                SetStatus("Ожидание второго игрока...", Color.DarkRed);
                 return;
             }
 
             if (!IsMyTurn())
             {
-                SetStatus("Сейчас не ваш ход.", true);
+                SetStatus("Сейчас не ваш ход.", Color.DarkRed);
                 return;
             }
 
@@ -268,7 +271,7 @@ namespace L9_new
 
             if (board[x, y] != 0)
             {
-                SetStatus("Клетка уже занята.", true);
+                SetStatus("Клетка уже занята.", Color.DarkRed);
                 return;
             }
 
@@ -375,7 +378,7 @@ namespace L9_new
                 return;
             }
 
-            SetStatus("Соединение с сервером разорвано", true);
+            SetStatus("Соединение с сервером разорвано", Color.DarkRed);
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
