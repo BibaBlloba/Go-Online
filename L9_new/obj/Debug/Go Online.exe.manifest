@@ -55,14 +55,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Go Online.exe" size="40864">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Go Online.exe" size="41376">
       <assemblyIdentity name="Go Online" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>IgPhV/+TrVjJEKQXnuTqFLD0+6zgpcmgodHBX4BDwNU=</dsig:DigestValue>
+        <dsig:DigestValue>OqQO7wcu7eObEpKR7x6QjFLEQU1yhshduvGY2ahfyyM=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Fleck;
+using L9_new.Properties;
 using WebSocketSharp;
 
 namespace L9_new
@@ -20,6 +21,8 @@ namespace L9_new
         public MainMenu()
         {
             InitializeComponent();
+
+            textBox1.Text = Settings.Default.ServerAddress;
         }
         
         // Подключение как клиент к удаленному серверу
@@ -32,6 +35,9 @@ namespace L9_new
                 errorLabel.Text = "Не удалось подключиться к серверу.";
                 return;
             }
+
+            Settings.Default.ServerAddress = serverAddress;
+            Settings.Default.Save();
 
             clientConnection = new ClientConnection($"ws://{serverAddress}");
             clientConnection.OnConnected += () =>

@@ -18,6 +18,22 @@ namespace L9_new.Properties
     {
 
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
+        internal string serverAddress;
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ServerAddress
+        {
+            get
+            {
+                return ((string)(this["ServerAddress"]));
+            }
+            set
+            {
+                this["ServerAddress"] = value;
+            }
+        }
 
         public static Settings Default
         {
