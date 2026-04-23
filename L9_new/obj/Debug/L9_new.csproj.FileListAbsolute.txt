@@ -1,0 +1,34 @@
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\bin\Debug\L9_new.exe.config
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\bin\Debug\L9_new.exe
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\bin\Debug\L9_new.pdb
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\bin\Debug\Fleck.dll
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\obj\Debug\L9_new.csproj.AssemblyReference.cache
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\obj\Debug\L9_new.Properties.Resources.resources
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\obj\Debug\L9_new.csproj.GenerateResource.cache
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\obj\Debug\L9_new.csproj.CoreCompileInputs.cache
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\obj\Debug\L9_new.csproj.Up2Date
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\obj\Debug\L9_new.exe
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\obj\Debug\L9_new.pdb
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\obj\Debug\L9_new.MainMenu.resources
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\bin\Debug\websocket-sharp.dll
+C:\Users\vlad\Desktop\UP-2025-2026\L9_new\L9_new\bin\Debug\websocket-sharp.xml
+D:\proj\Go-Online\L9_new\bin\Debug\Fleck.dll
+D:\proj\Go-Online\L9_new\bin\Debug\websocket-sharp.dll
+D:\proj\Go-Online\L9_new\bin\Debug\websocket-sharp.xml
+D:\proj\Go-Online\L9_new\obj\Debug\L9_new.csproj.AssemblyReference.cache
+D:\proj\Go-Online\L9_new\obj\Debug\L9_new.MainMenu.resources
+D:\proj\Go-Online\L9_new\obj\Debug\L9_new.Properties.Resources.resources
+D:\proj\Go-Online\L9_new\obj\Debug\L9_new.csproj.GenerateResource.cache
+D:\proj\Go-Online\L9_new\obj\Debug\L9_new.csproj.CoreCompileInputs.cache
+D:\proj\Go-Online\L9_new\obj\Debug\L9_new.csproj.Up2Date
+D:\proj\Go-Online\L9_new\obj\Debug\L9_new.GameForm.resources
+D:\proj\Go-Online\L9_new\bin\Debug\Go Online.exe.config
+D:\proj\Go-Online\L9_new\bin\Debug\Go Online.exe.manifest
+D:\proj\Go-Online\L9_new\bin\Debug\Go Online.application
+D:\proj\Go-Online\L9_new\bin\Debug\Go Online.exe
+D:\proj\Go-Online\L9_new\bin\Debug\Go Online.pdb
+D:\proj\Go-Online\L9_new\obj\Debug\Go Online.exe.manifest
+D:\proj\Go-Online\L9_new\obj\Debug\Go Online.application
+D:\proj\Go-Online\L9_new\obj\Debug\Go Online.exe
+D:\proj\Go-Online\L9_new\obj\Debug\Go Online.pdb
+D:\proj\Go-Online\L9_new\obj\Debug\Go Online.exe.config
