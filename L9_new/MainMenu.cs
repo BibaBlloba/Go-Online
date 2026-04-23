@@ -71,13 +71,7 @@ namespace L9_new
 
         private void OpenGameForm()
         {
-            GameForm gameForm = new GameForm(clientConnection);
-            gameForm.FormClosed += (s, e) =>
-            {
-                // Когда GameForm закрывается, очищаем ресурсы
-                clientConnection?.Disconnect();
-                serverConnection?.Stop();
-            };
+            GameForm gameForm = new GameForm(clientConnection, serverConnection);
 
             // Скрываем MainMenu вместо закрытия
             this.Hide();

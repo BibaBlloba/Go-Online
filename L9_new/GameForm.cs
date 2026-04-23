@@ -13,11 +13,13 @@ namespace L9_new
     public partial class GameForm : Form
     {
         private ClientConnection clientConnection;
+        private ServerConnection serverConnection;
 
-        public GameForm(ClientConnection connection)
+        public GameForm(ClientConnection connection, ServerConnection server = null)
         {
             InitializeComponent();
             clientConnection = connection;
+            serverConnection = server;
 
             if (clientConnection != null)
             {
@@ -44,9 +46,19 @@ namespace L9_new
             {
                 clientConnection.OnMessageReceived -= HandleMessageReceived;
                 clientConnection.OnDisconnected -= HandleDisconnected;
+                clientConnection.Disconnect();
+            }
+
+            // Останавливаем сервер если он был запущен
+            if (serverConnection != null)
+            {
+                serverConnection.Stop();
             }
 
             base.OnFormClosing(e);
+
+            // Закрываем всю программу
+            Application.Exit();
         }
     }
 }
