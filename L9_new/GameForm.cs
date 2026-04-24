@@ -8,7 +8,6 @@ namespace L9_new
     {
         private Panel boardPanel;
         private Label statusLabel;
-        private Label roleLabel;
 
         private ClientConnection clientConnection;
         private ServerConnection serverConnection;
@@ -34,12 +33,10 @@ namespace L9_new
             if (isHost)
             {
                 statusLabel.Text = "Хост: ожидание второго игрока...";
-                roleLabel.Text = "Роль: Хост";
             }
             else
             {
                 statusLabel.Text = "Гость: ожидание настройки раунда...";
-                roleLabel.Text = "Роль: Гость";
             }
 
             if (clientConnection != null)
@@ -63,15 +60,6 @@ namespace L9_new
                 Font = new Font(Font.FontFamily, 10, FontStyle.Bold)
             };
             Controls.Add(statusLabel);
-
-            roleLabel = new Label
-            {
-                Location = new Point(10, 40),
-                Size = new Size(360, 25),
-                Text = "Роль: ?",
-                Font = new Font(Font.FontFamily, 9, FontStyle.Regular)
-            };
-            Controls.Add(roleLabel);
 
             boardPanel = new Panel
             {
@@ -204,7 +192,6 @@ namespace L9_new
             currentTurn = PlayerColor.Black;
             roundActive = true;
 
-            roleLabel.Text = isHost ? $"Роль: Хост ({GameProtocol.ColorToString(myColor)})" : $"Роль: Гость ({GameProtocol.ColorToString(myColor)})";
             statusLabel.Text = IsMyTurn() ? "Ваш ход" : "Ожидайте ход соперника";
             boardPanel.Invalidate();
         }
