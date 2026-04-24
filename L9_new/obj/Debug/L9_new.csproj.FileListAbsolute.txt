@@ -32,3 +32,23 @@ D:\proj\Go-Online\L9_new\obj\Debug\Go Online.application
 D:\proj\Go-Online\L9_new\obj\Debug\Go Online.exe
 D:\proj\Go-Online\L9_new\obj\Debug\Go Online.pdb
 D:\proj\Go-Online\L9_new\obj\Debug\Go Online.exe.config
+F:\Колледж\УП C#\Л9\go-online\L9_new\bin\Debug\Go Online.exe.config
+F:\Колледж\УП C#\Л9\go-online\L9_new\bin\Debug\Go Online.exe.manifest
+F:\Колледж\УП C#\Л9\go-online\L9_new\bin\Debug\Go Online.application
+F:\Колледж\УП C#\Л9\go-online\L9_new\bin\Debug\Go Online.exe
+F:\Колледж\УП C#\Л9\go-online\L9_new\bin\Debug\Go Online.pdb
+F:\Колледж\УП C#\Л9\go-online\L9_new\bin\Debug\Fleck.dll
+F:\Колледж\УП C#\Л9\go-online\L9_new\bin\Debug\websocket-sharp.dll
+F:\Колледж\УП C#\Л9\go-online\L9_new\bin\Debug\websocket-sharp.xml
+F:\Колледж\УП C#\Л9\go-online\L9_new\obj\Debug\L9_new.csproj.AssemblyReference.cache
+F:\Колледж\УП C#\Л9\go-online\L9_new\obj\Debug\Go Online.exe.config
+F:\Колледж\УП C#\Л9\go-online\L9_new\obj\Debug\L9_new.GameForm.resources
+F:\Колледж\УП C#\Л9\go-online\L9_new\obj\Debug\L9_new.MainMenu.resources
+F:\Колледж\УП C#\Л9\go-online\L9_new\obj\Debug\L9_new.Properties.Resources.resources
+F:\Колледж\УП C#\Л9\go-online\L9_new\obj\Debug\L9_new.csproj.GenerateResource.cache
+F:\Колледж\УП C#\Л9\go-online\L9_new\obj\Debug\L9_new.csproj.CoreCompileInputs.cache
+F:\Колледж\УП C#\Л9\go-online\L9_new\obj\Debug\Go Online.exe.manifest
+F:\Колледж\УП C#\Л9\go-online\L9_new\obj\Debug\Go Online.application
+F:\Колледж\УП C#\Л9\go-online\L9_new\obj\Debug\L9_new.csproj.Up2Date
+F:\Колледж\УП C#\Л9\go-online\L9_new\obj\Debug\Go Online.exe
+F:\Колледж\УП C#\Л9\go-online\L9_new\obj\Debug\Go Online.pdb
