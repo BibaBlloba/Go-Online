@@ -45,6 +45,7 @@ namespace L9_new
             this.Text = "GameForm";
             this.ResumeLayout(false);
             this.MaximumSize = new System.Drawing.Size(800, 900);
+            this.MinimumSize = new System.Drawing.Size(800, 900);
         }
 
         private void InitializeGameUI()
