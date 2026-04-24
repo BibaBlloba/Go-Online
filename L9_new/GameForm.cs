@@ -6,9 +6,6 @@ namespace L9_new
 {
     public partial class GameForm : Form
     {
-        private Panel boardPanel;
-        private Label statusLabel;
-
         private ClientConnection clientConnection;
         private ServerConnection serverConnection;
         private bool isHost;
@@ -19,7 +16,6 @@ namespace L9_new
         private PlayerColor myColor = PlayerColor.None;
         private PlayerColor currentTurn = PlayerColor.None;
         private bool roundActive;
-        private Button endGameButton;
 
         public GameForm(ClientConnection connection, ServerConnection server = null)
         {
@@ -44,41 +40,6 @@ namespace L9_new
                 clientConnection.OnMessageReceived += HandleMessageReceived;
                 clientConnection.OnDisconnected += HandleDisconnected;
             }
-        }
-
-        private void InitializeGameUI()
-        {
-            Text = "Игра в Го";
-            ClientSize = new Size(800, 850);
-            StartPosition = FormStartPosition.CenterScreen;
-
-            statusLabel = new Label
-            {
-                Location = new Point(10, 10),
-                Size = new Size(760, 25),
-                Text = "Подключение...",
-                Font = new Font(Font.FontFamily, 10, FontStyle.Bold)
-            };
-            Controls.Add(statusLabel);
-
-            boardPanel = new Panel
-            {
-                Location = new Point(10, 80),
-                Size = new Size(680, 680),
-                BackColor = Color.BurlyWood
-            };
-            boardPanel.Paint += BoardPanel_Paint;
-            boardPanel.MouseClick += BoardPanel_MouseClick;
-            Controls.Add(boardPanel);
-
-            endGameButton = new Button
-            {
-                Location = new Point(10, 770),
-                Size = new Size(200, 35),
-                Text = "Пропустить ход"
-            };
-            endGameButton.Click += (sender, args) => RequestPass();
-            Controls.Add(endGameButton);
         }
 
         private void RequestPass()
